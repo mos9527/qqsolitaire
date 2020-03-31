@@ -1,13 +1,19 @@
 import requests
 import json
 import re
-import logging,coloredlogs
+import time
+import sys
+import logging
+import coloredlogs
 
-from myutils import userio,urlparams
+from myutils import userio, js2dict, cookie2dict
 coloredlogs.install(logging.DEBUG)
-cookies = """
-pgv_pvid=2986671978; pgv_pvi=7280240640; RK=Ek5xPVJGUE; ptcz=ba448e2788d8d4dc443714d7d0b69cdce7a705b93715c21fc280b6036f768056; tvfe_boss_uuid=78e57206f6625467; ts_refer=ADTAGCLIENT.QQ.5603_.0; ts_uid=6431297639; eas_sid=h1D5U8f3E7H6B242P5M659D3s1; ptui_loginuin=2949306730; luin=o2949306730; lskey=00010000a0631c67cd3e5ba8eb70ffa787f9d6c38048442c5c0d49e7d69044a156d7dec8a59442e215aa5d20; pgv_si=s3977101312; _qpsvr_localtk=0.5601014086081146; uin=o2137923739; skey=@uZANbhKgr; p_uin=o2137923739; pt4_token=VpHLrHlpKTmdGG-Faf1CuRIT2Yi4aFZ7MzsA4jpI39I_; p_skey=d9WBsgaVocBCV5eGBIKIEfmrbmvxB3-UYcuqms9Kp*k_; traceid=2f5523deb0; pgv_info=ssid=s9277498560; idqq_account=theCanChange%3D1%3BtheShowUin%3D2137923739%3BBindedPhone%3D133******86%3BPhoneCanSeach%3D1%3Bmb%3D180******60%3BUinCanSeach%3D1%3Bshouldshowmail%3D1%3Bfirstsetidqq%3D1%3BMSK%3D0%3B
-"""
+
+if len(sys.argv)<2:
+    print('使用：python qqunsolitaire.py [cookie] [加群分享链接]')
+    sys.exit()
+
+_,cookies,share_url = sys.argv
 
 
 def _bkn(skey):
@@ -19,16 +25,18 @@ def _bkn(skey):
     return mask1 & mask2
 
 
-cookies =  urlparams.GetParams(cookies)
+cookies = cookie2dict.cookie2dict(cookies)
 s = requests.Session()
 s.cookies.update(cookies)
+
 
 def getRawUin(share_url):
     '''Fetches real ID of `QQqun`'''
     regex = '(?<=rawuin = )\d*'
     r = s.get(share_url).text
-    rawuin = re.findall(regex,r)
+    rawuin = re.findall(regex, r)
     return rawuin[0]
+
 
 def chainlist(raw_uin, start=0, num=1):
     '''Retrives the list of solitaires'''
@@ -40,28 +48,75 @@ def chainlist(raw_uin, start=0, num=1):
             'num': num,
             'bkn': _bkn(s.cookies['skey'])
         }
-    )    
+    )
+    logging.debug('Requested solitaire URL:%s' % r.url)
     return json.loads(r.text)
 
-def chaininfo(raw_uin,chain_cid, start=0, num=1):
+
+def chaininfo(raw_uin, chain_cid, start=0, num=1):
     '''Retrives the detailed info of a solitaire'''
     r = s.get(
         'https://qun.qq.com/cgi-bin/group_chain/chain_get',
         params={
             'gc': raw_uin,
-            'cid':chain_cid,
-            'get_type':0,
+            'cid': chain_cid,
+            'get_type': 0,
             'start': start,
             'num': num,
             'bkn': _bkn(s.cookies['skey'])
         }
-    )    
+    )
     return json.loads(r.text)
 
-share = 'https://jq.qq.com/?_wv=1027&k=55gKUHM'
 
-rawuin = getRawUin(share)
+def chainsignup(raw_uin, chain_cid):
+    '''Perform signup'''
+    r = s.get(
+        'https://qun.qq.com/cgi-bin/group_chain/chain_sign',
+        params={
+            'gc': raw_uin,
+            'cid': chain_cid,
+            'bkn': _bkn(s.cookies['skey'])
+        }
+    )
+    return json.loads(r.text)
+
+
+list_count = 5
+chain_member_count = 15
+
+# Match with regex
+share_url = re.findall(r'http[s]?:/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',share_url)[0]
+
+rawuin = getRawUin(share_url)
 logging.debug('真实群号：%s' % rawuin)
+logging.debug('接龙 Web URL：%s' %
+              'https://qun.qq.com/homework/qunsolitaire/list.html?gc=' + rawuin)
+# List all chains
+chains = chainlist(rawuin, 0, list_count)
+userio.listout(chains['data']['list'], foreach=lambda x,
+               i: f"{x['name']}:{x['desc']}", title=f'接龙详情（最近 {list_count} 次）', reverse=True)
 
-chains = chainlist(rawuin)
-userio.listout(chains['data']['list'],foreach=lambda x,i:f"{x['name']}:{x['desc']}",title='接龙详情')
+for chain in chains['data']['list']:
+    # Perform the followings to every chain in list
+    time.sleep(1)
+
+    chain_info = chaininfo(rawuin, chain['id'], 0, chain_member_count)
+    print(
+        f"准备签到：{chain_info['data']['info']['creater_nick']}:{chain_info['data']['info']['desc']}")
+
+    time.sleep(1)
+
+    userio.listout(chain_info['data']['signup_uins'], foreach=lambda x,
+                   i: f"QQ：{str(x['uin']).ljust(15)} | {['','已签到','未签到'][x['type']]} | {x['name']}  {'（我）' if str(x['uin']) in s.cookies['uin'] else ''}", title=f'所有人员（前 {chain_member_count} 位）')
+
+    time.sleep(1)
+
+    # Wait,then try to signup
+    try:
+        result = chainsignup(rawuin, chain['id'])
+        print('结果：', result['msg'] if result['msg'] else '成功')
+    except Exception as e:
+        logging.error(e)
+
+logging.info('执行完毕')
