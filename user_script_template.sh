@@ -18,4 +18,5 @@ cd qqsolitaire
 python -m pip install requests coloredlogs
 
 echo 开始执行
+cd ..
 python qqsolitaire/qqsolitaire.py "$share" "$cookie"
