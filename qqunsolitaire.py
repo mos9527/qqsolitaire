@@ -10,10 +10,10 @@ from myutils import userio, js2dict, cookie2dict
 coloredlogs.install(logging.DEBUG)
 
 if len(sys.argv)<2:
-    print('使用：python qqunsolitaire.py [cookie] [加群分享链接]')
+    print('使用：python qqunsolitaire.py [加群分享文本] [cookie]')
     sys.exit()
 
-_,cookies,share_url = sys.argv
+_,share_url,cookies = sys.argv
 
 
 def _bkn(skey):
