@@ -1,8 +1,8 @@
 #!/bin/bash
 
-cookie=""
+cookie=$1
 # 你的Cookie，请自己配置
-share="https://jq.qq.com/?_wv=1027&k=52P5RqJ"
+share=$2
 # Q群分享链接
 
 echo QQSolitaire 依赖安装脚本
@@ -14,9 +14,8 @@ rm -rf qqsolitaire
 git clone https://github.com/greats3an/qqsolitaire
 
 echo 正在安装 pip 依赖
-cd qqsolitaire
 python -m pip install requests coloredlogs
 
 echo 开始执行
-cd ..
+echo 分享链接：$share
 python qqsolitaire/qqsolitaire.py "$share" "$cookie"

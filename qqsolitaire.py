@@ -10,10 +10,10 @@ from myutils import userio, js2dict, cookie2dict
 coloredlogs.install(logging.DEBUG)
 
 if len(sys.argv)<2:
-    print('使用：python qqunsolitaire.py [加群分享文本] [cookie]')
+    print('使用：python qqunsolitaire.py [cookie] [加群分享文本] ')
     sys.exit()
 
-_,share_url,cookies = sys.argv
+_,cookies,share_url = sys.argv
 
 
 def _bkn(skey):
@@ -94,6 +94,12 @@ logging.debug('接龙 Web URL：%s' %
               'https://qun.qq.com/homework/qunsolitaire/list.html?gc=' + rawuin)
 # List all chains
 chains = chainlist(rawuin, 0, list_count)
+if chains['msg']:
+    logging.error('Login message:%s' % chains['msg'])
+    logging.error('Cookies might be expired')
+    print('登录失败，Cookies可能已过期')
+    sys.exit()
+
 userio.listout(chains['data']['list'], foreach=lambda x,
                i: f"{x['name']}:{x['desc']}", title=f'接龙详情（最近 {list_count} 次）', reverse=True)
 
