@@ -14,7 +14,7 @@ rm -rf qqsolitaire
 git clone https://github.com/greats3an/qqsolitaire
 
 echo 正在安装 pip 依赖
-python -m pip install requests coloredlogs
+python -m pip install requests coloredlogs qqlib
 
 echo 开始执行
 echo 分享链接：$share
