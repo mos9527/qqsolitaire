@@ -98,6 +98,7 @@ if chains['msg']:
     logging.error('Login message:%s' % chains['msg'])
     logging.error('Cookies might be expired')
     print('登录失败，Cookies可能已过期')
+    time.sleep(5)
     sys.exit()
 
 userio.listout(chains['data']['list'], foreach=lambda x,
@@ -105,18 +106,14 @@ userio.listout(chains['data']['list'], foreach=lambda x,
 
 for chain in chains['data']['list']:
     # Perform the followings to every chain in list
-    time.sleep(1)
+
     print('加载中...')
     chain_info = chaininfo(rawuin, chain['id'], 0, chain_member_count)
     print(
         f"准备签到：{chain_info['data']['info']['creater_nick']}:{chain_info['data']['info']['desc']}")
 
-    time.sleep(1)
-
     userio.listout(chain_info['data']['signup_uins'], foreach=lambda x,
                    i: f"QQ：{str(x['uin']).ljust(15)} | {['','已签到','未签到'][x['type']]} | {x['name']}  {'（我）' if str(x['uin']) in s.cookies['uin'] else ''}", title=f'所有人员（前 {chain_member_count} 位）')
-
-    time.sleep(1)
 
     # Wait,then try to signup
     try:
