@@ -98,8 +98,7 @@ if chains['msg']:
     logging.error('Login message:%s' % chains['msg'])
     logging.error('Cookies might be expired')
     print('登录失败，Cookies可能已过期')
-    time.sleep(5)
-    sys.exit()
+    end()
 
 userio.listout(chains['data']['list'], foreach=lambda x,
                i: f"{x['name']}:{x['desc']}", title=f'接龙详情（最近 {list_count} 次）', reverse=True)
@@ -122,4 +121,8 @@ for chain in chains['data']['list']:
     except Exception as e:
         logging.error(e)
 
-logging.info('执行完毕')
+def end():
+    logging.info('执行完毕')
+    time.sleep(5)
+
+end()
