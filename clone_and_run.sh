@@ -13,4 +13,4 @@ git clone https://github.com/greats3an/qqsolitaire
 
 echo 开始执行
 echo 分享链接：$share
-python qqsolitaire/qqsolitaire.py $cookie $share
+python qqsolitaire/qqsolitaire.py "$cookie" "$share"
