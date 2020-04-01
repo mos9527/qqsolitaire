@@ -82,7 +82,7 @@ def chainsignup(raw_uin, chain_cid):
     return json.loads(r.text)
 
 
-list_count = 2
+list_count = 5
 chain_member_count = 5
 
 # Match with regex
