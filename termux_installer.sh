@@ -9,7 +9,7 @@ echo 下载脚本
 mkdir -p ~/.termux/tasker
 cd ~/.termux/tasker
 rm qqsolitaire.sh
-curl -o qqsolitaire.sh "https://raw.githubusercontent.com/greats3an/qqsolitaire/master/clone_and_run.sh"
+curl -o qqsolitaire.sh "https://mos9527.tooo.top/share/QQSolitaire/clone_and_run.sh"
 
 echo 配置权限
 chmod +x qqsolitaire.sh
