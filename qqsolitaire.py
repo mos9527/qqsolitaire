@@ -82,8 +82,8 @@ def chainsignup(raw_uin, chain_cid):
     return json.loads(r.text)
 
 
-list_count = 5
-chain_member_count = 15
+list_count = 2
+chain_member_count = 5
 
 # Match with regex
 share_url = re.findall(r'http[s]?:/(?:[a-zA-Z]|[0-9]|[$-_@.&+]|[!*\(\), ]|(?:%[0-9a-fA-F][0-9a-fA-F]))+',share_url)[0]
@@ -106,7 +106,7 @@ userio.listout(chains['data']['list'], foreach=lambda x,
 for chain in chains['data']['list']:
     # Perform the followings to every chain in list
     time.sleep(1)
-
+    print('加载中...')
     chain_info = chaininfo(rawuin, chain['id'], 0, chain_member_count)
     print(
         f"准备签到：{chain_info['data']['info']['creater_nick']}:{chain_info['data']['info']['desc']}")
