@@ -8,6 +8,10 @@ python -m pip install requests coloredlogs
 echo 下载脚本
 mkdir -p ~/.termux/tasker
 cd ~/.termux/tasker
+rm qqsolitaire.sh
 curl -o qqsolitaire.sh "https://raw.githubusercontent.com/greats3an/qqsolitaire/master/clone_and_run.sh"
+
+echo 配置权限
+chmod +x qqsolitaire.sh
 
 echo 预配置完毕，请在 Tasker 继续操作
