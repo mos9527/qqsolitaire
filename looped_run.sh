@@ -4,7 +4,7 @@ cookie=$1
 # 你的Cookie，请以形参形式传入 e.g.
 # $ ./qd [cookie]
 share=""
-# Q群分享链接
+# Q群分享链接，保留引号
 interval=100
 # 执行延时（秒）
 
@@ -18,9 +18,12 @@ fi
 
 echo QQSolitaire 依赖安装脚本
 
-echo 克隆项目
-rm -rf qqsolitaire
-git clone https://github.com/greats3an/qqsolitaire
+git --version >&1 >/dev/null
+if [$? -eq 0];then
+    echo Git已安装，克隆项目
+    rm -rf qqsolitaire
+    git clone https://github.com/greats3an/qqsolitaire
+fi
 
 echo 开始执行
 echo 分享链接：$share
