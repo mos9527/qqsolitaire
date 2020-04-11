@@ -1,7 +1,7 @@
 # QQSolitare
 ## 安装:
 - Termux:
-	`bash <(https://raw.githubusercontent.com/greats3an/qqsolitaire/master/installer.sh)`
+	`bash <(curl -s https://raw.githubusercontent.com/greats3an/qqsolitaire/master/installer.sh)`
 - Others
 	1. 安装 git (可选，可以zip形式下载) , Python 3.x
 	2. 安装 pip 依赖：requests coloredlogs
