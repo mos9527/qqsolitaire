@@ -7,7 +7,7 @@ echo 正在安装 pip 依赖 $pipreq
 python -m pip install $pipreq
 
 echo 下载脚本
-curl -o qd "https://mos9527.tooo.top/share/QQSolitaire/looped_run.sh"
+curl -o qd "https://raw.githubusercontent.com/greats3an/qqsolitaire/master/looped_run.sh"
 
 echo 配置权限
 chmod +x qd
