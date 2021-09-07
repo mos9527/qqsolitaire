@@ -5,15 +5,7 @@ cookie=
 share=""
 # Q群分享链接，带上引号
 interval=100
-# 执行延时（秒）
-
-if [ $share -eq "" ];then
-    echo 您没有配置【分享链接】
-    echo 请使用 vi / nano / pico 等编辑器
-    echo 编辑本脚本中 share= 以设置该项
-    sleep 2
-    exit 1
-fi
+# 执行延时
 
 echo QQSolitaire 依赖安装脚本
 
