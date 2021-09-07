@@ -12,7 +12,7 @@ curl -o qd "https://raw.githubusercontent.com/greats3an/qqsolitaire/master/loope
 echo 配置权限
 chmod +x qd
 
-echo 预配置完毕，请编辑文件 qd 中的 【分享链接】
+echo 预配置完毕，请编辑文件 qd 中的 【Cookies,分享链接】
 echo 以继续操作
 
 echo 执行： $ ./qd
