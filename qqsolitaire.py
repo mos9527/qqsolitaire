@@ -32,11 +32,10 @@ s.cookies.update(cookies)
 
 def getRawUin(share_url):
     '''Fetches real ID of `QQqun`'''
-    regex = '(?<=rawuin = )\d*'
-    r = s.get(share_url).text
+    regex = '(?<=group_code=)\d*'
+    r = s.get(share_url).url
     rawuin = re.findall(regex, r)
     return rawuin[0]
-
 
 def chainlist(raw_uin, start=0, num=1):
     '''Retrives the list of solitaires'''
