@@ -1,13 +1,13 @@
 #!/bin/bash
 # 请在此处预先设置好Cookie,分享链接，延时
-cookie=""
-# Cookie
+cookie=
+# Cookie，应有引号
 share=""
-# Q群分享链接，保留引号
+# Q群分享链接，带上引号
 interval=100
 # 执行延时（秒）
 
-if [$share -eq ""];then
+if [ $share -eq "" ];then
     echo 您没有配置【分享链接】
     echo 请使用 vi / nano / pico 等编辑器
     echo 编辑本脚本中 share= 以设置该项
@@ -18,7 +18,7 @@ fi
 echo QQSolitaire 依赖安装脚本
 
 git --version >&1 >/dev/null
-if [$? -eq 0];then
+if [ $? -eq 0 ];then
     echo Git已安装，克隆项目
     rm -rf qqsolitaire
     git clone https://github.com/greats3an/qqsolitaire
