@@ -1,8 +1,7 @@
 #!/bin/bash
-# 请在此处预先设置好分享链接，延时
-cookie=$1
-# 你的Cookie，请以形参形式传入 e.g.
-# $ ./qd [cookie]
+# 请在此处预先设置好Cookie,分享链接，延时
+cookie=""
+# Cookie
 share=""
 # Q群分享链接，保留引号
 interval=100
